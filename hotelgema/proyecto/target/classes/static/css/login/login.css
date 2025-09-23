@@ -1,0 +1,45 @@
+.section__login {
+    min-height: 80vh;
+    padding: 6rem 0 2rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.login__container {
+    max-width: 1200px;
+    padding: 5rem 1.5rem;
+}
+
+.login-form {
+    max-width: 500px;
+    margin: auto;
+}
+
+.image__login {
+    max-width: 100%;
+    margin: auto;
+}
+
+.nav-tabs {
+    max-width: 500px;
+    margin: auto;
+    margin-bottom: 1rem;
+}
+
+.register-form {
+    max-width: 500px;
+    margin: auto;
+}
+
+.register-form label {
+    font-weight: 700;
+}
+
+
+@media (max-width: 995px) {
+ .image__login {
+    display: none;
+ }
+}

@@ -1,0 +1,56 @@
+.section__client__dashboard {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 4rem 0 5rem 0;
+}
+
+.dashboard__client__banner {
+    position: relative;
+    background: -webkit-linear-gradient(to right, #434343de, #0000007c), url("/images/banner_dashboard.png");
+    background: linear-gradient(to right, #434343de, #0000007c), url("/images/banner_dashboard.png");
+    color: white;
+    padding: 7rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    animation: portada 25s linear infinite alternate-reverse;
+    width: 100%;
+}
+
+.dashboard__reserva__medios__pagos p{
+    font-size: .95rem;
+}
+
+.navbar__cliente__menu {
+    width: 100%;
+    background: #0000007c;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    padding: auto;
+    display: flex;
+    justify-content: center;
+    padding: 1rem 0;
+  
+}
+.navbar__cliente__menu .nav-link{
+      color: white !important;
+        border: 0 !important;
+        border-radius: 0;
+}
+.navbar__cliente__menu {
+      border: 0;
+}
+.navbar__cliente__menu .active{
+      background: #343a40 !important;
+      border: 0;
+}
+
+.table td, .table th {
+    white-space: normal !important;
+    word-break: break-word;
+}

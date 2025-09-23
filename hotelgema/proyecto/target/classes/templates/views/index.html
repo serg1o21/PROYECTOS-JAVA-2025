@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" />
+        <link th:href="@{/css/main/main.css}" rel="stylesheet" />
+        <link rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+        <title>Hotel Gema</title>
+    </head>
+    <body>
+        <header class="fixed-top header"> <div th:insert="~{fragments/layouts/header :: header}"></div>
+        </header>
+
+        <section class="portada section__portada">
+            <div class="container text-center">
+                <h3>Te damos la Bienvenida al</h3>
+                <h1>HOTEL GEMA</h1>
+                <p>¡Un lugar para exploradores contemporáneos de la vida!</p>
+                <button class="btn btn-outline-light btn__reservar">Reservar
+                    ahora</button>
+            </div>
+        </section>
+
+        <section class="habitacion section__habitacion ">
+            <div class="container">
+                <h2 class="mb-2">HABITACIONES</h2>
+                <p>Conoce nuestras habitaciones disponibles para ti y tu
+                    familia</p>
+                <div class="habitacion__cards justify-content-center">
+                    <div class="row">
+                        <div class="col-xxl-4 col-md-6 col-12 mb-4">
+                            <a
+                                th:href="@{/habitaciones?nombre=estandar}"
+                                class="text-decoration-none text-dark">
+                                <div class="habitacion__card shadow-lg">
+                                    <img class="image__habitacion"
+                                        th:src="@{/images/habitacion_estandar.png}" />
+                                    <div class="habitacion__descripcion">
+                                        <h3>Estándar</h3>
+                                    </div>
+                                </div>
+                            </a>
+
+                        </div>
+                        <div class="col-xxl-4 col-md-6 col-12 mb-4">
+                            <a th:href="@{/habitaciones?nombre=doble}"
+                                class="text-decoration-none text-dark">
+                                <div class="habitacion__card shadow-lg">
+                                    <img class="image__habitacion"
+                                        th:src="@{/images/habitacion_doble.png}" />
+                                    <div class="habitacion__descripcion">
+                                        <h3>Doble</h3>
+                                    </div>
+
+                                </div>
+                            </a>
+
+                        </div>
+                        <div class="col-xxl-4 col-md-6 col-12 mb-4">
+                            <a
+                                th:href="@{/habitaciones?nombre=matrimonial}"
+                                class="text-decoration-none text-dark">
+                                <div class="habitacion__card shadow-lg">
+                                    <img class="image__habitacion"
+                                        th:src="@{/images/habitacion_matrimonial.png}" />
+                                    <div class="habitacion__descripcion">
+                                        <h3>Matrimonial</h3>
+                                    </div>
+                                </div>
+                            </a>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <section class="nosotros section__nosotros" id="nosotros">
+            <div class="container">
+                <div class="row">
+                    <div class="col-6 nosotros__column__portada">
+
+                    </div>
+                    <div
+                        class="col-6 nosotros__column__descripcion">
+                        <div>
+                            <h2 class="mb-4">SOBRE NOSOTROS</h2>
+                            <p>
+                                Somos un alojamiento – Hotel en Los Olivos para
+                                personas que buscan un lugar tranquilo y cómodo
+                                donde descansar. Ideal para viajeros,
+                                corporativos o
+                                parejas que buscan habitaciones full equipadas.
+                                Nos
+                                encontramos 20min del Aeropuerto y cerca de la
+                                Estación Naranjal, Municipalidad de Los Olivos,
+                                Mega
+                                Plaza y Plaza Norte
+                            </p>
+                            <h4 class="mt-4">Llámanos al <a
+                                    href="tel:+51929316548"
+                                    class="text-white text-decoration-none">(+51)
+                                    929 316 548</a></h3>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="testimonios section__testimonio">
+            <div class="container">
+                <div class="text-center mb-5">
+                    <h2 class="fw-bold">Lo que opinan nuestros huéspedes</h2>
+                    <p class="text-muted">Experiencias reales de quienes
+                        disfrutaron su estadía en nuestro hotel</p>
+                </div>
+
+                <div class="row g-4">
+                    <!-- Testimonio 1 -->
+                    <div class="col-md-4">
+                        <div class="card shadow-lg h-100 border-0">
+                            <div class="card-body text-center">
+                                <img
+                                    src="https://randomuser.me/api/portraits/women/45.jpg"
+                                    alt="Huésped" class="rounded-circle mb-3"
+                                    width="90" height="90">
+                                <h5 class="card-title">Laura Méndez</h5>
+                                <p class="text-muted">Viajera de negocios</p>
+                                <p class="card-text fst-italic">“El hotel es
+                                    impecable, las habitaciones son muy cómodas
+                                    y el personal siempre atento.
+                                    Definitivamente volveré.”</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Testimonio 2 -->
+                    <div class="col-md-4">
+                        <div class="card shadow-lg h-100 border-0">
+                            <div class="card-body text-center">
+                                <img
+                                    src="https://randomuser.me/api/portraits/men/40.jpg"
+                                    alt="Huésped" class="rounded-circle mb-3"
+                                    width="90" height="90">
+                                <h5 class="card-title">Javier Torres</h5>
+                                <p class="text-muted">Turista</p>
+                                <p class="card-text fst-italic">“Excelente
+                                    ubicación, a pocos minutos del centro. El
+                                    desayuno buffet es delicioso y variado.”</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Testimonio 3 -->
+                    <div class="col-md-4">
+                        <div class="card shadow-lg h-100 border-0">
+                            <div class="card-body text-center">
+                                <img
+                                    src="https://randomuser.me/api/portraits/women/68.jpg"
+                                    alt="Huésped" class="rounded-circle mb-3"
+                                    width="90" height="90">
+                                <h5 class="card-title">Isabella Rojas</h5>
+                                <p class="text-muted">Pareja de luna de miel</p>
+                                <p class="card-text fst-italic">“Nuestra
+                                    experiencia fue mágica. La suite romántica y
+                                    la atención del personal hicieron que
+                                    nuestro viaje fuera inolvidable.”</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mapa section__mapa">
+            <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d62450.074779535746!2d-77.11502169008818!3d-11.965522727382929!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105ce21b6748c45%3A0xece5fa25a5e8c4d5!2sLos%20Olivos!5e0!3m2!1ses!2spe!4v1757485061617!5m2!1ses!2spe"
+                width="100%" height="450" style="border:0;" allowfullscreen
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </section>
+
+        <footer class="footer">
+         <div th:insert="~{fragments/layouts/footer :: footer}"></div>
+        </footer>
+
+        <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+        <script th:src="@{/js/main/main.js}"></script>
+    </body>
+</html>

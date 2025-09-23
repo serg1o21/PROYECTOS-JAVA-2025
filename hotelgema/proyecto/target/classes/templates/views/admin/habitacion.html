@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Dashboard administrador</title>
+        <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" />
+        <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" />
+        <link th:href="@{/css/main/main.css}" rel="stylesheet" />
+        <link th:href="@{/css/admin/dashboard.css}" rel="stylesheet" />
+        <link rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    </head>
+
+    <body class="bg-white">
+
+        <header class="fixed-top header">
+            <div <div th:insert="~{fragments/layouts/header :: header}"></div>
+        </header>
+
+        <section class="section__admin__dashboard">
+            <div class="dashboard__admin__banner">
+                <h2 class="text-center" th:text="'PANEL ADMINISTRATIVO'">
+                </h2>
+            </div>
+            <div class="menudashboard">
+                <div th:insert="~{fragments/layouts/menu :: menu}"></div>
+            </div>
+            <div class="container mt-4 container__generico">
+                <div
+                    class="d-flex justify-content-between align-items-center mb-3">
+                    <h2 class="mb-0">Habitaciones</h2>
+                    <button class="btn btn-dark" data-bs-toggle="modal"
+                        data-bs-target="#modalHabitacion">
+                        Nueva habitación
+                    </button>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>#</th>
+                                <th>Número</th>
+                                <th>Tipo</th>
+                                <th>Capacidad</th>
+                                <th>Precio/Noche</th>
+                                <th>Estado</th>
+                                <th>Categoría</th>
+                                <th class="text-center">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla-habitacion">
+                            <!-- Filas dinámicas -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Modal Crear/Editar Habitación -->
+            <div class="modal fade" id="modalHabitacion" tabindex="-1"
+                aria-labelledby="modalHabitacionLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header bg-dark text-white">
+                            <h5 class="modal-title"
+                                id="modalHabitacionLabel">Nueva
+                                Habitación</h5>
+                            <button type="button"
+                                class="btn-close btn-close-white"
+                                data-bs-dismiss="modal"></button>
+                        </div>
+                        <form id="formHabitacion">
+                            <div class="modal-body">
+                                <input type="hidden" id="habitacionId"
+                                    name="idHabitacion">
+
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="mb-3">
+                                            <label for="numero"
+                                                class="form-label">Número</label>
+                                            <input type="text"
+                                                class="form-control" id="numero"
+                                                name="numero" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="mb-3">
+                                            <label for="tipo"
+                                                class="form-label">Tipo</label>
+                                            <input type="text"
+                                                class="form-control" id="tipo"
+                                                name="tipo" required>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="mb-3">
+                                            <label for="capacidad"
+                                                class="form-label">Capacidad</label>
+                                            <input type="number"
+                                                class="form-control"
+                                                id="capacidad" name="capacidad"
+                                                required>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="mb-3">
+                                            <label for="precioNoche"
+                                                class="form-label">Precio/Noche</label>
+                                            <input type="number"
+                                                class="form-control"
+                                                id="precioNoche"
+                                                name="precioNoche"
+                                                step="0.01" required>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="estado"
+                                        class="form-label">Estado</label>
+                                    <select class="form-select" id="estado"
+                                        name="estado" required>
+                                        <option value>Seleccione...</option>
+                                        <option
+                                            value="DISPONIBLE">Disponible</option>
+                                        <option value="OCUPADA">Ocupada</option>
+                                        <option
+                                            value="MANTENIMIENTO">Mantenimiento</option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="categoriaId"
+                                        class="form-label">Categoría</label>
+                                    <select class="form-select" id="categoriaId"
+                                        required>
+                                        <!-- Se llena dinámicamente con JS -->
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary"
+                                    data-bs-dismiss="modal">Cancelar</button>
+                                <button type="submit"
+                                    class="btn btn-primary">Guardar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Confirmar Eliminación -->
+            <div class="modal fade" id="modalEliminar" tabindex="-1"
+                aria-hidden="true">
+                <div class="modal-dialog modal-sm">
+                    <div class="modal-content">
+                        <div class="modal-header bg-danger text-white">
+                            <h5 class="modal-title">Confirmar</h5>
+                            <button type="button"
+                                class="btn-close btn-close-white"
+                                data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            ¿Estás seguro de eliminar esta habitación?
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary"
+                                data-bs-dismiss="modal">Cancelar</button>
+                            <button class="btn btn-danger"
+                                id="btnConfirmarEliminar">Eliminar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <footer class="footer">
+            <div th:insert="~{fragments/layouts/footer :: footer}"></div>
+        </footer>
+
+        <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+        <script th:src="@{/js/main/main.js}"></script>
+        <script th:src="@{/js/admin/habitacion.js}"></script>
+
+    </body>
+
+</html>

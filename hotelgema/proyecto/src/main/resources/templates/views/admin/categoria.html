@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard administrador</title>
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" />
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" />
+    <link th:href="@{/css/main/main.css}" rel="stylesheet" />
+    <link th:href="@{/css/admin/dashboard.css}" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+
+</head>
+
+<body class="bg-white">
+
+    <header class="fixed-top header">
+        <div th:insert="~{fragments/layouts/header :: header}"></div>
+    </header>
+
+    <section class="section__admin__dashboard">
+        <div class="dashboard__admin__banner">
+            <h2 class="text-center" th:text="'PANEL ADMINISTRATIVO'">
+            </h2>
+        </div>
+
+        <div class="menudashboard">
+             <div th:insert="~{fragments/layouts/menu :: menu}"></div>
+        </div>
+
+        <div class="container mt-4 container__generico">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="mb-0">Categorías</h2>
+                <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#modalCategoria">
+                    Nueva Categoría
+                </button>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>#</th>
+                            <th>Nombre</th>
+                            <th>Descripción</th>
+                            <th>Precio</th>
+                            <th>Aforo</th>
+                            <th>Beneficios</th>
+                            <th>Imagen</th>
+                            <th class="text-center">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-categorias">
+                        <!-- Filas dinámicas -->
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+        <!-- Modal Crear/Editar Categoría -->
+        <div class="modal fade" id="modalCategoria" tabindex="-1" aria-labelledby="modalCategoriaLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header bg-dark text-white">
+                        <h5 class="modal-title" id="modalCategoriaLabel">Nueva
+                            Categoría</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                    <form id="formCategoria">
+                        <div class="modal-body">
+                            <input type="hidden" id="categoriaId">
+                            <div class="row">
+                                <div class="col-5">
+                                    <div class="mb-3">
+                                        <label for="nombre" class="form-label">Nombre</label>
+                                        <input type="text" class="form-control" id="nombre" required>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="mb-3">
+                                        <label for="precio" class="form-label">Precio</label>
+                                        <input type="number" class="form-control" id="precio" step="0.01" required>
+                                    </div>
+
+                                </div>
+                                <div class="col-3">
+                                    <div class="mb-3">
+                                        <label for="aforo" class="form-label">Aforo</label>
+                                        <input type="text" class="form-control" id="aforo">
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="mb-3">
+                                        <label for="descripcion" class="form-label">Descripción</label>
+                                        <textarea class="form-control" id="descripcion" rows="3"></textarea>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="beneficios" class="form-label">Beneficios (separados por
+                                    coma)</label>
+                                <input type="text" class="form-control" id="beneficios">
+                            </div>
+                            <div class="mb-3">
+                                <label for="imagen" class="form-label">Imagen</label>
+                                <input type="file" class="form-control" id="imagen">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary">Guardar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Confirmar Eliminación -->
+        <div class="modal fade" id="modalEliminar" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title">Confirmar</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        ¿Estás seguro de eliminar esta categoría?
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button class="btn btn-danger" id="btnConfirmarEliminar">Eliminar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+    </section>
+
+    <footer class="footer">
+        <div th:insert="~{fragments/layouts/footer :: footer}"></div>
+    </footer>
+
+    <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/js/main/main.js}"></script>
+    <script th:src="@{/js/admin/categoria.js}"></script>
+
+</body>
+
+</html>

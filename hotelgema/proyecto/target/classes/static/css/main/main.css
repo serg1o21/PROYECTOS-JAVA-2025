@@ -1,0 +1,188 @@
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap');
+
+body {
+
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    font-family: "Comfortaa", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: weight;
+    font-style: normal;
+    font-size: 16px;
+}
+
+
+.logo {
+
+    font-size: 1.8rem;
+}
+
+.logo__image {
+    min-width: 18px;
+    height: 30px;
+
+}
+
+h1 {
+    font-size: 4.5rem;
+}
+
+p {
+    font-size: 1.3rem;
+}
+
+.header {
+    background: #38352E;
+}
+
+.section__portada {
+    color: white;
+    background: #000000;
+    background: -webkit-linear-gradient(to right, #434343de, #0000007c), url("/images/background_main_page.png");
+    background: linear-gradient(to right, #434343de, #0000007c), url("/images/background_main_page.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 80vh;
+    padding: 15rem 0 8rem 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.btn__reservar {
+    padding: 1rem 2rem;
+    font-size: 1.3rem;
+}
+
+
+.section__habitacion {
+    padding: 5rem 0;
+}
+
+
+.habitacion__card {
+
+    max-width: 400px;
+    height: 400px;
+    position: relative;
+    transition: transform 0.3s ease;
+    margin: auto;
+}
+
+.habitacion__card:hover {
+    opacity: .8;
+    cursor: pointer;
+    transform: translateY(-5px);
+
+}
+
+.image__habitacion {
+    max-width: 400px;
+    margin: auto;
+}
+
+.habitacion__descripcion {
+    background: white;
+    position: absolute;
+    width: 350px;
+    bottom: -10px;
+    right: 0;
+    text-align: center;
+    padding: 1rem .5rem;
+}
+
+.section__nosotros {
+    padding: 3rem 0;
+}
+
+.nosotros__column__portada {
+    color: white;
+    background: #000000;
+    background: -webkit-linear-gradient(to right, #434343de, #0000007c), url("/images/background_section_nosotros.png");
+    background: linear-gradient(to right, #434343de, #0000007c), url("/images/background_section_nosotros.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 60vh;
+    padding: 5rem 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.nosotros__column__descripcion {
+
+    background: #38352E;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10rem 2rem;
+
+}
+
+.nosotros__column__descripcion p {
+    font-size: 1.3rem;
+}
+
+
+
+
+.section__testimonio {
+    background: white;
+    padding: 5rem 0;
+}
+
+.card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+
+.section__categoria {
+
+    padding: 6rem 0 5rem 0;
+}
+
+.categoria__banner {
+    position: relative;
+    background: -webkit-linear-gradient(to right, #434343de, #0000007c), url("/images/banner_categoria.png");
+    background: linear-gradient(to right, #434343de, #0000007c), url("/images/banner_categoria.png");
+    color: white;
+    padding: 7rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    animation: portada 25s linear infinite alternate-reverse;
+}
+.categoria__text__capacidad {
+    font-size: 1rem;
+}
+.footer {
+    background: #38352E;
+    padding: 5rem;
+}
+
+
+#logoutBtn {
+    cursor: pointer;
+}
+
+@keyframes portada {
+    0% {
+        background-position: bottom left;
+    }
+
+    100% {
+        background-position: top right;
+    }
+}

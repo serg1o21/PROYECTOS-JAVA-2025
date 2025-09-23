@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" />
+    <link th:href="@{/css/main/main.css}" rel="stylesheet" />
+    <link th:href="@{/css/login/login.css}" rel="stylesheet" />
+    <link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <title th:text="${@environment.getProperty('aplicacion.nombre')}"></title>
+
+  </head>
+  <body>
+
+    <header class="fixed-top header"> <div
+        <div th:insert="~{fragments/layouts/header :: header}"></div>
+    </header>
+    <section class="section__login">
+      <div class="container login__container shadow-lg">
+        <div class="row">
+
+          <div class="col-xxl-5 col-lg-5 col-sm-12 d-flex align-items-center justify-content-center">
+            <img class="image__login"
+              th:src="@{/images/ilustracion_login_2.png}" />
+          </div>
+          <div class="col-xxl-7 col-lg-7 col-sm-12 ">
+            <ul class="nav nav-tabs">
+              <li class="nav-item">
+                <a class="nav-link active text-secondary" data-bs-toggle="tab"
+                  href="#login">Ingresar</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-secondary" data-bs-toggle="tab"
+                  href="#register">Registrarse</a>
+              </li>
+
+            </ul>
+            <div class="tab-content mt-4">
+              <div class="tab-pane container active" id="login">
+                <div class="login-form">
+                  <!-- FORMULARIO LOGIN-->
+                  <form id="formLogin" th:action="@{/usuario/login}">
+                    <h2 class="text-center">Iniciar Sesión</h2>
+                    <small class="text-secondary">Ingresa a nuestra plataforma
+                      para poder visualizar tus reservas, si aún no tienes una
+                      cuenta, regístrate ahora!</small>
+
+                    <div class="form-group mt-3 mb-3">
+                      <label class="form-label fw-bolder">Usuario</label>
+                      <input type="text" name="usuario" required
+                        class="form-control" />
+                    </div>
+
+                    <div class="form-group mb-3">
+                      <label class="form-label fw-bolder">Contraseña</label>
+                      <input type="password" name="clave" required
+                        class="form-control" />
+                    </div>
+
+                    <div class="form-group">
+                      <input type="submit" value="Ingresar"
+                        class="btn btn-dark w-100" />
+                    </div>
+                    <!-- ALERTA DEL LOGIN -->
+                    <div id="alertaLogin" class="alert d-none mt-3"
+                      role="alert">
+                      <span id="alertaTextoLogin"></span>
+                    </div>
+                  </form>
+
+                </div>
+              </div>
+              <div class="tab-pane container fade" id="register">
+                <div class="register-form">
+                  <!--FORMULARIO REGISTRO-->
+                  <form method="post" action="#"
+                    th:action="@{/usuario/registrar}" id="formRegistro">
+                    <h2 class="text-center">Crear Cuenta</h2>
+                    <small class="text-secondary">
+                      Registrate para poder realizar reservas y darles
+                      seguimiento.
+                    </small>
+
+                    <div class="form-group mt-2 mb-2">
+                      <label class="form-label">Nombres</label>
+                      <input type="text" name="nombre" class="form-control"
+                        required />
+                      <div class="invalid-feedback" id="error-nombre"></div>
+                    </div>
+
+                    <div class="form-group mt-2 mb-2">
+                      <label class="form-label">Apellidos</label>
+                      <input type="text" name="apellido" class="form-control"
+                        required />
+                      <div class="invalid-feedback" id="error-apellido"></div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-5">
+                        <div class="form-group mt-2 mb-2">
+                          <label class="form-label">Fec. nacimiento</label>
+                          <input type="date" name="fecnacimiento"
+                            class="form-control" required />
+                          <div class="invalid-feedback"
+                            id="error-fecnacimiento"></div>
+                        </div>
+                      </div>
+
+                      <div class="col-7">
+                        <div class="form-group mt-2 mb-2">
+                          <label class="form-label">Género</label>
+                          <select class="form-control form-select"
+                            name="genero">
+                            <option value>Seleccione...</option>
+                            <option value="M">Masculino</option>
+                            <option value="F">Femenino</option>
+                            <option value="O">Otros</option>
+                          </select>
+                          <div class="invalid-feedback" id="error-genero"></div>
+                        </div>
+                      </div>
+
+                      <div class="col-5">
+                        <div class="form-group mt-2 mb-2">
+                          <label class="form-label">Documento</label>
+                          <select class="form-control form-select"
+                            name="tipodoc">
+                            <option value>Seleccione...</option>
+                            <option value="DNI">DNI</option>
+                            <option value="LC">LC</option>
+                            <option value="LE">LE</option>
+                            <option value="CI">CI</option>
+                          </select>
+                          <div class="invalid-feedback"
+                            id="error-tipodoc"></div>
+                        </div>
+                      </div>
+
+                      <div class="col-7">
+                        <div class="form-group mt-2 mb-2">
+                          <label class="form-label">N° de documento</label>
+                          <input type="number" name="ndoc" class="form-control"
+                            required />
+                          <div class="invalid-feedback" id="error-ndoc"></div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="form-group mt-2 mb-2">
+                      <label class="form-label">Correo electrónico</label>
+                      <input type="email" name="correo" class="form-control"
+                        required />
+                      <div class="invalid-feedback" id="error-correo"></div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-6">
+                        <div class="form-group mb-3">
+                          <label class="form-label">Usuario</label>
+                          <input type="text" name="usuario"
+                            class="form-control" />
+                          <div class="invalid-feedback"
+                            id="error-usuario"></div>
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <div class="form-group mb-3">
+                          <label class="form-label">Contraseña</label>
+                          <input type="password" name="clave"
+                            class="form-control" />
+                          <div class="invalid-feedback" id="error-clave"></div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <input type="submit" value="Registrar"
+                        class="btn btn-dark w-100" />
+                    </div>
+                  </form>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- ALERTA DEL REGISTRO -->
+            <div id="alertaRegistro"
+              class="alert alert-danger alert-dismissible fade show mt-3 d-none"
+              role="alert">
+              <strong id="alertaTextoRegistro"></strong>
+              <button type="button" class="btn-close" data-bs-dismiss="alert"
+                aria-label="Close"></button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+    <footer class="footer">
+      <div th:insert="~{fragments/layouts/footer :: footer}"></div>
+    </footer>
+    <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/js/login/login.js}"></script>
+    <script th:src="@{/js/login/register.js}"></script>
+    <script th:src="@{/js/main/main.js}"></script>
+  </body>
+</html>
