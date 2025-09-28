@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-HotelGemaApplication<hotelgema>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.proyecto.hotelgema.HotelGemaApplication",
+            "projectName": "hotelgema",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

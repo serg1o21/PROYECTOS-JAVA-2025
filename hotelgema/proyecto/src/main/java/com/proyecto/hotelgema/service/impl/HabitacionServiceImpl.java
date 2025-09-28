@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.proyecto.hotelgema.dao.entity.HabitacionEntity;
 import com.proyecto.hotelgema.dao.repository.HabitacionRepository;
 import com.proyecto.hotelgema.service.HabitacionService;
@@ -12,12 +13,9 @@ import com.proyecto.hotelgema.service.HabitacionService;
 @Service
 public class HabitacionServiceImpl implements HabitacionService {
 
-
-
     // inyectamos la dependencia del repositorio
     @Autowired
     private HabitacionRepository habitacionRepository;
-
 
     public List<HabitacionEntity> obtenerDisponibles(LocalDate checkIn, LocalDate checkOut, String categoria) {
         if (checkIn == null || checkOut == null || !checkOut.isAfter(checkIn)) {
@@ -29,6 +27,11 @@ public class HabitacionServiceImpl implements HabitacionService {
     @Override
     public List<HabitacionEntity> listarHabitaciones() {
         return habitacionRepository.findAll();
+    }
+
+    @Override
+    public HabitacionEntity obtenerHabitacionPorId(int id) {
+        return habitacionRepository.findById(id).orElse(null);
     }
 
     @Override
@@ -49,11 +52,6 @@ public class HabitacionServiceImpl implements HabitacionService {
         }
         habitacionRepository.deleteById(id);
         return true;
-    }
-
-    @Override
-    public HabitacionEntity obtenerHabitacionPorId(int id) {
-        return habitacionRepository.findById(id).orElse(null);
     }
 
 }

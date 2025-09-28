@@ -1,12 +1,20 @@
 package com.proyecto.hotelgema.dao.entity;
 
-import jakarta.persistence.*;
-import lombok.Data;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import lombok.Data;
 
 @Data
 @Entity
@@ -38,6 +46,10 @@ public class ReservaEntity {
 
     @Column(name = "fec_actualizacion", insertable = false, updatable = false)
     private LocalDateTime fecActualizacion;
+
+  
+   @Column(name = "url_comprobante")
+    private String urlComprobante;
 
     @JsonManagedReference
     @OneToMany(mappedBy = "reserva", cascade = CascadeType.ALL, orphanRemoval = true)

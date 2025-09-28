@@ -6,7 +6,6 @@ import com.proyecto.hotelgema.dao.entity.ReservaEntity;
 
 public interface ReservaService {
     ReservaEntity crearReserva(ReservaEntity reserva, String username);
-
-
     List<ReservaEntity> listarReservas(String username);
+    void actualizarEstado(int id, String estado);
 }

@@ -1,20 +1,22 @@
 package com.proyecto.hotelgema.service.impl;
 
-import com.proyecto.hotelgema.dao.entity.ReservaEntity;
-import com.proyecto.hotelgema.dao.entity.DetalleReservaEntity;
-import com.proyecto.hotelgema.dao.entity.HabitacionEntity;
-import com.proyecto.hotelgema.dao.entity.UsuarioEntity;
-import com.proyecto.hotelgema.dao.repository.ReservaRepository;
-import com.proyecto.hotelgema.dao.repository.HabitacionRepository;
-import com.proyecto.hotelgema.dao.repository.UsuarioRepository;
-import com.proyecto.hotelgema.service.ReservaService;
-import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
 import java.math.BigDecimal;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import com.proyecto.hotelgema.dao.entity.DetalleReservaEntity;
+import com.proyecto.hotelgema.dao.entity.HabitacionEntity;
+import com.proyecto.hotelgema.dao.entity.ReservaEntity;
+import com.proyecto.hotelgema.dao.entity.UsuarioEntity;
+import com.proyecto.hotelgema.dao.repository.HabitacionRepository;
+import com.proyecto.hotelgema.dao.repository.ReservaRepository;
+import com.proyecto.hotelgema.dao.repository.UsuarioRepository;
+import com.proyecto.hotelgema.service.ReservaService;
+
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -48,8 +50,9 @@ public class ReservaServiceImpl implements ReservaService {
 
         // calculamos las noches por el precio segun tipo de habitación
         long noches = ChronoUnit.DAYS.between(reserva.getCheckIn(), reserva.getCheckOut());
-        if (noches <= 0)
+        if (noches <= 0) {
             noches = 1;
+        }
 
         // verificamos que nuestro detalle de la reserva no este como nulo
         if (reserva.getDetalles() == null || reserva.getDetalles().isEmpty()) {
@@ -81,10 +84,38 @@ public class ReservaServiceImpl implements ReservaService {
 
     @Override
     public List<ReservaEntity> listarReservas(String username) {
+        if (username.equals("ROLE_ADMIN")) {
+            return reservaRepository.findAll();
+        }
         UsuarioEntity usuario = usuarioRepository.findByUsuario(username)
                 .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado: " + username));
         String usuarioEncontrado = usuario.getNdoc();
         return reservaRepository.findByIdCliente(usuarioEncontrado);
+    }
+
+    @Override
+    @Transactional
+    public void actualizarEstado(int id, String estado) {
+        ReservaEntity reserva = reservaRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Reserva no encontrado: " + id));
+        reserva.setEstado(estado);
+        if (reserva != null) {
+            //buscamos las habitaciones de la reserva para cambiarle su estado a OCUPADA
+            for (DetalleReservaEntity detalleReservaEntity : reserva.getDetalles()) {
+                // guardamos los ids enviados desde el front
+                Integer idHabitacion = detalleReservaEntity.getHabitacion().getIdHabitacion();
+                // buscamos uno x uno las habitaciones
+                HabitacionEntity habitacion = habitacionRepository.findById(idHabitacion)
+                        .orElseThrow(
+                                () -> new IllegalArgumentException("La habitación con ID " + idHabitacion + " no existe"));
+                if (estado.equals("CONFIRMADA")) {
+
+                    habitacion.setEstado("OCUPADA");
+                } else {
+                    habitacion.setEstado("DISPONIBLE");
+                }
+            }
+        }
+        reservaRepository.save(reserva);
     }
 
 }

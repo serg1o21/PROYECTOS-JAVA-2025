@@ -1,17 +1,18 @@
 package com.proyecto.hotelgema.config;
 
-import com.proyecto.hotelgema.security.JwtAuthenticationFilter;
-import com.proyecto.hotelgema.security.JwtUtil;
-import com.proyecto.hotelgema.service.UsuarioService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+
+import com.proyecto.hotelgema.security.JwtAuthenticationFilter;
+import com.proyecto.hotelgema.security.JwtUtil;
+import com.proyecto.hotelgema.service.UsuarioService;
 
 @Configuration
 @EnableWebSecurity
@@ -39,10 +40,10 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http, JwtAuthenticationFilter jwtFilter) throws Exception {
         http.csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                // Rutas públicas (acceso sin autenticación)
                 .requestMatchers(
                         "/login/**",
                         "/",
+                        "/auth/**",
                         "/usuario/**",
                         "/imagen/**",
                         "/habitaciones/**",
@@ -53,18 +54,15 @@ public class SecurityConfig {
                         "/images/**"
                 ).permitAll()
 
-                //rutas protegidas por el rol
                 .requestMatchers("/admin/**", "/categoria/**").hasRole("ADMIN")
                 .requestMatchers("/cliente/**").hasRole("CLIENTE")
                 .requestMatchers("/dashboard/**","/reserva/**", "/habitacion/**").hasAnyRole("ADMIN", "CLIENTE")
 
-                // Cualquier otra requiere autenticación
                 .anyRequest().authenticated()
             )
             // Stateless para que funcione con JWT
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
-        // Filtro de JWT antes del de username/password
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

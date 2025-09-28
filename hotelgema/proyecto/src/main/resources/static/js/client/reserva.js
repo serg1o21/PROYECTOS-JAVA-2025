@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
             sessionStorage.setItem("precioSeleccionado", precio);
 
             try {
-                const res = await fetch("/usuario/check");
+                const res = await fetch("/auth/check");
 
                 if (!res.ok) {
                     window.location.href = "/login";

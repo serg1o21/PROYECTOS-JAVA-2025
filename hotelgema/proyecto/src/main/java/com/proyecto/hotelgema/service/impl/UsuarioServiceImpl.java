@@ -1,15 +1,18 @@
 package com.proyecto.hotelgema.service.impl;
 
-import com.proyecto.hotelgema.dao.entity.UsuarioEntity;
-import com.proyecto.hotelgema.dao.repository.UsuarioRepository;
-import com.proyecto.hotelgema.service.UsuarioService;
+import java.util.List;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.*;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import com.proyecto.hotelgema.dao.entity.UsuarioEntity;
+import com.proyecto.hotelgema.dao.repository.UsuarioRepository;
+import com.proyecto.hotelgema.service.UsuarioService;
 
 @Service
 public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
@@ -24,7 +27,7 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
     }
 
     @Override
-    public void crearUsuario(UsuarioEntity usuarioEntity) {
+    public UsuarioEntity crearUsuario(UsuarioEntity usuarioEntity) {
         if (usuarioRepository.existsByNdoc(usuarioEntity.getNdoc()))
             throw new IllegalArgumentException("El número de documento ya está registrado");
         if (usuarioRepository.existsByUsuario(usuarioEntity.getUsuario()))
@@ -36,7 +39,7 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
         // Si no se envía un rol explícito, asigna uno por defecto
         usuarioEntity.setRol("CLIENTE");
         usuarioEntity.setEstado(true);
-        usuarioRepository.save(usuarioEntity);
+        return usuarioRepository.save(usuarioEntity);
     }
 
     @Override
@@ -56,6 +59,23 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
     public UsuarioEntity buscarUsuario(String usuario) {
         return usuarioRepository.findByUsuario(usuario)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
+    }
+
+    @Override
+    public UsuarioEntity buscarUsuarioPorDoc(String ndoc) {
+        return usuarioRepository.findByNdoc(ndoc)
+                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
+    }
+
+    @Override
+    public List<UsuarioEntity> listarUsuarios() {
+        return usuarioRepository.findAll();
+    }
+
+    @Override
+    public UsuarioEntity actualizarUsuario(String ndoc, UsuarioEntity usuarioEntity) {
+        usuarioEntity.setNdoc(ndoc);
+        return usuarioRepository.save(usuarioEntity);
     }
 
 }

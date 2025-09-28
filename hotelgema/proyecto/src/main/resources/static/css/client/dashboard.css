@@ -50,7 +50,7 @@
       border: 0;
 }
 
-.table td, .table th {
-    white-space: normal !important;
-    word-break: break-word;
+#tabPanelMisReservas{
+    max-width: 2000px !important; 
+    padding: 0 !important;
 }

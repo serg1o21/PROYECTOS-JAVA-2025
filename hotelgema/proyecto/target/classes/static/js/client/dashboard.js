@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const hiddenInput = document.createElement("input");
     hiddenInput.type = "hidden";
     hiddenInput.name = "habitacionesSeleccionadas";
-    document.getElementById("formRegistro").appendChild(hiddenInput);
+    document.getElementById("formReservar").appendChild(hiddenInput);
 
     let ultimaFechaCheckin = "";
     let ultimaFechaCheckout = "";
@@ -120,7 +120,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-    document.getElementById("formRegistro").addEventListener("submit", async function (e) {
+    document.getElementById("formReservar").addEventListener("submit", async function (e) {
         e.preventDefault();
 
         if (habitacionesSeleccionadas.size === 0) {

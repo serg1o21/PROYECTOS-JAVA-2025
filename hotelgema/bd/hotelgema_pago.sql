@@ -36,7 +36,7 @@ CREATE TABLE `pago` (
   PRIMARY KEY (`id_pago`),
   KEY `id_reserva` (`id_reserva`),
   CONSTRAINT `pago_ibfk_1` FOREIGN KEY (`id_reserva`) REFERENCES `reserva` (`id_reserva`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --

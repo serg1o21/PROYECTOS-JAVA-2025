@@ -1,6 +1,7 @@
 package com.proyecto.hotelgema.security;
 
-import com.proyecto.hotelgema.service.UsuarioService;
+import java.io.IOException;
+import java.util.List;
 
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -9,14 +10,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
+
+import com.proyecto.hotelgema.service.UsuarioService;
+
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
-import java.io.IOException;
-import java.util.List;
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
@@ -36,13 +37,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String path = request.getRequestURI();
 
-        // 🔓 IGNORAR rutas públicas para que no intente validar JWT
+        // IGNORAR rutas públicas para que no intente validar JWT
         if (path.startsWith("/login")
-                || path.startsWith("/usuario")
                 || path.startsWith("/css")
                 || path.startsWith("/js")
-                || path.startsWith("/images")
-                || path.equals("/")) {
+                || path.startsWith("/images")) {
             filterChain.doFilter(request, response);
             return;
         }

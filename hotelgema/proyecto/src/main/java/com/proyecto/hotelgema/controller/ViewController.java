@@ -1,8 +1,16 @@
 package com.proyecto.hotelgema.controller;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -11,11 +19,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.proyecto.hotelgema.dao.entity.CategoriaEntity;
 import com.proyecto.hotelgema.service.CategoriaService;
 
 @Controller
 public class ViewController {
+
     @Autowired
     private CategoriaService categoriaService;
 
@@ -55,6 +65,29 @@ public class ViewController {
                 .body(categoria.getImagen());
     }
 
+    @GetMapping("/api/archivos/comprobantes/{nombreArchivo}")
+    public ResponseEntity<Resource> servirComprobante(
+            @PathVariable String nombreArchivo,
+            Authentication authentication) throws IOException {
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        Path archivoPath = Paths.get("uploads/clientes/comprobantes").resolve(nombreArchivo);
+
+        if (!Files.exists(archivoPath)) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Resource recurso = new UrlResource(archivoPath.toUri());
+        String contentType = Files.probeContentType(archivoPath);
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType != null ? contentType : "application/octet-stream"))
+                .body(recurso);
+    }
+
     @GetMapping("/login")
     public String mostrarLogin() {
         return "views/security/login";
@@ -78,5 +111,15 @@ public class ViewController {
     @GetMapping("/admin/mantenimiento/categoria")
     public String mantenimientoCategoria(Model model, Authentication authentication) {
         return "views/admin/categoria";
+    }
+
+    @GetMapping("/admin/mantenimiento/usuario")
+    public String mantenimientoUsuario(Model model, Authentication authentication) {
+        return "views/admin/usuario";
+    }
+
+    @GetMapping("/admin/mantenimiento/reserva")
+    public String mantenimientoReserva(Model model, Authentication authentication) {
+        return "views/admin/reserva";
     }
 }

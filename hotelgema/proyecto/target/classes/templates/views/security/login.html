@@ -41,7 +41,7 @@
               <div class="tab-pane container active" id="login">
                 <div class="login-form">
                   <!-- FORMULARIO LOGIN-->
-                  <form id="formLogin" th:action="@{/usuario/login}">
+                  <form id="formLogin" th:action="@{/auth/login}">
                     <h2 class="text-center">Iniciar Sesión</h2>
                     <small class="text-secondary">Ingresa a nuestra plataforma
                       para poder visualizar tus reservas, si aún no tienes una
@@ -76,7 +76,7 @@
                 <div class="register-form">
                   <!--FORMULARIO REGISTRO-->
                   <form method="post" action="#"
-                    th:action="@{/usuario/registrar}" id="formRegistro">
+                    th:action="@{/auth/registrar}" id="formRegistro">
                     <h2 class="text-center">Crear Cuenta</h2>
                     <small class="text-secondary">
                       Registrate para poder realizar reservas y darles

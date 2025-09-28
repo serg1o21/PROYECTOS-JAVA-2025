@@ -15,13 +15,13 @@ public interface HabitacionRepository extends JpaRepository<HabitacionEntity, In
             SELECT h
             FROM HabitacionEntity h
             JOIN h.categoria c
-            WHERE h.estado = 'disponible'
+            WHERE h.estado != 'MANTENIMIENTO'
             AND c.nombre = :categoriaNombre
             AND h.idHabitacion NOT IN (
                 SELECT dr.habitacion.idHabitacion
                 FROM DetalleReservaEntity dr
                 JOIN dr.reserva r
-                WHERE r.estado = 'confirmada'
+                WHERE (r.estado = 'CONFIRMADA' OR r.estado = 'PENDIENTE')
                 AND :checkIn < r.checkOut
                 AND :checkOut > r.checkIn
             )

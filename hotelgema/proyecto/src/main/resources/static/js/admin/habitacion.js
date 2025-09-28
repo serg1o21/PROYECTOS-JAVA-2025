@@ -8,7 +8,7 @@ const selectCategoria = document.getElementById('categoriaId');
 let idEliminar = null;
 let modalHabitacion, modalEliminar;
 
-// ---------- API CALLS ----------
+
 async function apiFetch(url, options = {}) {
     try {
         const response = await fetch(url, options);
@@ -52,11 +52,10 @@ function renderHabitaciones(habitaciones) {
         fila.innerHTML = `
             <td>${hab.idHabitacion}</td>
             <td>${hab.numero}</td>
-            <td>${hab.tipo}</td>
+            <td>${hab.categoria?.nombre ?? 'Sin categoría'}</td>
             <td>${hab.capacidad}</td>
             <td>S/. ${parseFloat(hab.precioNoche).toFixed(2)}</td>
             <td>${hab.estado ?? ''}</td>
-            <td>${hab.categoria?.nombre ?? 'Sin categoría'}</td>
             <td class="text-center">
                 <button class="btn btn-sm btn-warning me-1" onclick="handleEditar(${hab.idHabitacion})"><i class="bi bi-pencil"></i></button>
                 <button class="btn btn-sm btn-danger" onclick="handleEliminar(${hab.idHabitacion})"><i class="bi bi-trash"></i></button>
@@ -173,7 +172,7 @@ async function handleSubmit(e) {
         precioNoche: parseFloat(document.getElementById("precioNoche").value),
         estado: document.getElementById("estado").value.trim(),
         categoria: selectCategoria.value
-            ? { id: parseInt(selectCategoria.value) } // 👈 IMPORTANTE: enviamos objeto con id
+            ? { id: parseInt(selectCategoria.value) }
             : null
     };
 

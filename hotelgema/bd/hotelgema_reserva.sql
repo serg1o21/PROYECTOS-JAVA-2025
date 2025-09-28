@@ -36,7 +36,7 @@ CREATE TABLE `reserva` (
   PRIMARY KEY (`id_reserva`),
   KEY `id_cliente` (`id_cliente`),
   CONSTRAINT `reserva_ibfk_1` FOREIGN KEY (`id_cliente`) REFERENCES `usuario` (`ndoc`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+)
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
