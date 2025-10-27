@@ -22,16 +22,25 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.proyecto.hotelgema.dao.entity.CategoriaEntity;
 import com.proyecto.hotelgema.service.CategoriaService;
+import com.proyecto.hotelgema.service.ComentarioService;
 
 @Controller
 public class ViewController {
 
     @Autowired
     private CategoriaService categoriaService;
+    @Autowired
+    private ComentarioService comentarioService;
 
     @GetMapping("/")
     public String mostrarInicio() {
         return "views/index";
+    }
+
+    @GetMapping("/comentarios")
+    public String mostrarComentarios(Model model) {
+        model.addAttribute("listaComentarios", comentarioService.obtenerComentarios());
+        return "views/client/comentarios";
     }
 
     @GetMapping("/habitaciones")

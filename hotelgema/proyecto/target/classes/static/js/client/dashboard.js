@@ -133,11 +133,11 @@ document.addEventListener("DOMContentLoaded", () => {
         const checkOut = document.querySelector("input[name='checkout']").value;
         const noches = calcularNoches();
 
-        // Construimos el objeto en el formato que espera el back
+        // Construimos el objeto en el formato que espera el backend
         const reservaPayload = {
             checkIn: checkIn,
             checkOut: checkOut,
-            estado: "PENDIENTE", // o el estado que corresponda
+            estado: "PENDIENTE",
             detalles: Array.from(habitacionesSeleccionadas.entries()).map(([id, datos]) => {
                 const precioPorNoche = parseNumberLocale(datos.precio);
                 const subtotal = precioPorNoche * noches;
@@ -149,29 +149,55 @@ document.addEventListener("DOMContentLoaded", () => {
             })
         };
 
+        // Crear FormData para enviar JSON + archivo
+        const formData = new FormData();
+        formData.append("reserva", JSON.stringify(reservaPayload));
+
+        const fileInput = document.querySelector("#formFile"); // ⚠️ id del input de archivo
+        if (fileInput && fileInput.files.length > 0) {
+            console.log("Enviando archivo:", fileInput.files[0].name);
+            formData.append("comprobante", fileInput.files[0]);
+        }
+
         try {
             const response = await fetch("/reserva", {
                 method: "POST",
-                body: JSON.stringify(reservaPayload),
-                credentials: "include",
-                headers: {
-                    "X-Requested-With": "fetch",
-                    "Content-Type": "application/json"
-                }
+                body: formData,
+                credentials: "include" // ⚠️ NO headers Content-Type, fetch lo hace automáticamente
             });
 
             if (!response.ok) throw new Error(`Error ${response.status}`);
             const result = await response.json();
 
             if (result.success) {
-                alert("✅ Reserva realizada con éxito");
-
+                Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: "Reserva realizada con éxito",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+                document.getElementById("formReservar").reset();
+                habitacionesSeleccionadas.clear();
             } else {
-                alert("❌ No se pudo registrar la reserva: " + (result.message || "Error desconocido"));
+                Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: "No se pudo registrar la reserva",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+
             }
         } catch (error) {
             console.error("Error al guardar reserva:", error);
-            alert("Ocurrió un error al registrar la reserva.");
+            Swal.fire({
+                position: "top-end",
+                icon: "success",
+                title: "No se pudo registrar la reserva",
+                showConfirmButton: false,
+                timer: 1500
+            });
         }
     });
 
@@ -253,41 +279,49 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-async function listarReservas() {
-    try {
-        const response = await fetch("/reserva", {
-            method: "GET",
-            credentials: "include",
-            headers: {
-                "Content-Type": "application/json"
-            }
-        });
+    async function listarReservas() {
+        try {
+            const response = await fetch("/reserva", {
+                method: "GET",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
 
-        if (!response.ok) throw new Error(`Error ${response.status}`);
+            if (!response.ok) throw new Error(`Error ${response.status}`);
 
-        const reservas = await response.json();
-        const tbody = document.getElementById("tabla-reservas");
-        tbody.innerHTML = "";
+            const result = await response.json();
+            const reservas = result.data; // Aquí accedemos al array "data"
+            const tbody = document.getElementById("tabla-reservas");
+            tbody.innerHTML = "";
 
-        reservas.data.forEach(reserva => {
-            const total = reserva.detalles.reduce((acc, det) => acc + det.subtotal, 0);
+            reservas.forEach(reserva => {
+                const total = reserva.detalles.reduce((acc, det) => acc + det.subtotal, 0);
 
-            const tr = document.createElement("tr");
-            tr.innerHTML = `
+                // Crear enlace para el comprobante si existe
+                let comprobanteHTML = reserva.urlComprobante
+                    ? `<a href="${reserva.urlComprobante}" target="_blank">Ver comprobante</a>`
+                    : "No disponible";
+
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
                 <td>${reserva.idReserva}</td>
                 <td>${reserva.checkIn}</td>
                 <td>${reserva.checkOut}</td>
                 <td>${reserva.detalles.map(det => `Hab. ${det.habitacion.numero}`).join(", ")}</td>
                 <td>${reserva.estado}</td>
+                <td>${comprobanteHTML}</td>
                 <td>S/. ${total.toFixed(2)}</td>
             `;
 
-            tbody.appendChild(tr);
-        });
+                tbody.appendChild(tr);
+            });
 
-    } catch (error) {
-        console.error("Error al cargar reservas:", error);
+        } catch (error) {
+            console.error("Error al cargar reservas:", error);
+        }
     }
-}
+
 
 });

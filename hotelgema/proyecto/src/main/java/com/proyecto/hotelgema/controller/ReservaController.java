@@ -44,46 +44,69 @@ public class ReservaController {
 
         Map<String, Object> response = new HashMap<>();
 
+        System.out.println("📌 Entramos al endpoint crearReserva");
+
         if (authentication == null || !authentication.isAuthenticated()) {
             return ResponseEntity.status(401)
                     .body(Map.of("message", "No autenticado"));
         }
+
         try {
+            // Mostrar JSON recibido
+            System.out.println("📥 JSON recibido: " + reservaJson);
+
             ReservaEntity reserva = objectMapper.readValue(reservaJson, ReservaEntity.class);
+
             if (comprobante != null && !comprobante.isEmpty()) {
+                System.out.println("📎 Archivo recibido: " + comprobante.getOriginalFilename()
+                        + ", tipo: " + comprobante.getContentType()
+                        + ", tamaño: " + comprobante.getSize());
+
                 if (!comprobante.getContentType().startsWith("image/")) {
                     return ResponseEntity.badRequest()
                             .body(Map.of("success", false, "message", "El archivo debe ser una imagen válida."));
                 }
-                Path carpeta = Paths.get("uploads", "clientes", "comprobantes");
+
+                // Carpeta absoluta para guardar comprobantes
+                Path carpeta = Paths.get(System.getProperty("user.dir"), "uploads", "clientes", "comprobantes");
                 if (!Files.exists(carpeta)) {
                     Files.createDirectories(carpeta);
                 }
+
                 String extension = getExtension(comprobante.getOriginalFilename());
-                String fechaActual = LocalDateTime.now()
-                        .format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss"));
+                String fechaActual = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss"));
                 String usuario = authentication.getName();
-                String nombreArchivo = "comprobante-" + fechaActual + "-" + usuario + "-"
+                String nombreArchivo = "comprobante-" + fechaActual + "-" + usuario
                         + (extension.isEmpty() ? "" : "." + extension);
 
                 Path destino = carpeta.resolve(nombreArchivo);
                 Files.copy(comprobante.getInputStream(), destino, StandardCopyOption.REPLACE_EXISTING);
+
+                // Guardar URL en la reserva
                 reserva.setUrlComprobante("/api/archivos/comprobantes/" + nombreArchivo);
+
+                // Devolver nombre de archivo para debug
+                response.put("archivoGuardado", nombreArchivo);
+            } else {
+                System.out.println("📎 No se envió comprobante");
             }
 
+            // Guardar reserva
             reservaService.crearReserva(reserva, authentication.getName());
 
             response.put("success", true);
             response.put("message", "Reserva creada correctamente");
+            response.put("reservaRecibida", reserva); // Devuelve el objeto parseado para debug
+
             return ResponseEntity.status(201).body(response);
 
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest()
-                    .body(Map.of("success", false, "message", e.getMessage()));
+                    .body(Map.of("success", false, "message", e.getMessage(), "reservaJson", reservaJson));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(500)
-                    .body(Map.of("success", false, "message", "Error interno del servidor"));
+                    .body(Map.of("success", false, "message", "Error interno del servidor", "reservaJson", reservaJson));
         }
     }
 

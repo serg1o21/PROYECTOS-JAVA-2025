@@ -18,8 +18,8 @@
                 <h3>Te damos la Bienvenida al</h3>
                 <h1>HOTEL GEMA</h1>
                 <p>¡Un lugar para exploradores contemporáneos de la vida!</p>
-                <button class="btn btn-outline-light btn__reservar">Reservar
-                    ahora</button>
+                <a class="btn btn-outline-light btn__reservar" th:href="@{/login}">Reservar
+                    ahora</a>
             </div>
         </section>
 
@@ -38,7 +38,7 @@
                                     <img class="image__habitacion"
                                         th:src="@{/images/habitacion_estandar.png}" />
                                     <div class="habitacion__descripcion">
-                                        <h3>Estándar</h3>
+                                        <h3>Simple</h3>
                                     </div>
                                 </div>
                             </a>
@@ -172,6 +172,10 @@
                                     nuestro viaje fuera inolvidable.”</p>
                             </div>
                         </div>
+                    </div>
+
+                    <div class="text-center py-4">
+                        <a th:href="@{/comentarios}" style="font-size: 1.2rem;" class="text-decoration-none text-dark">Ver más</a>
                     </div>
                 </div>
             </div>

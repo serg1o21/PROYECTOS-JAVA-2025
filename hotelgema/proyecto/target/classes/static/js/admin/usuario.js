@@ -1,10 +1,11 @@
-// ---------- ELEMENTOS DEL DOM ----------
+// ---------- VARIABLES GLOBALES ----------
 const tablaUsuarios = document.getElementById('tabla-usuario');
 const formUsuario = document.getElementById('formUsuario');
 const modalUsuarioEl = document.getElementById('modalUsuario');
 let modalUsuario;
+let esEdicion = false; // 🔹 Indicador de creación vs edición
 
-
+// ---------- FETCH API ----------
 async function apiFetch(url, options = {}) {
     try {
         const response = await fetch(url, options);
@@ -32,7 +33,6 @@ async function saveUsuario(data, id = null) {
     });
 }
 
-
 // ---------- RENDER UI ----------
 function renderUsuarios(usuarios) {
     tablaUsuarios.innerHTML = '';
@@ -50,18 +50,20 @@ function renderUsuarios(usuarios) {
             <td>${usu.usuario}</td>
             <td>${usu.estado ? 'habilitado' : 'deshabilitado'}</td>
             <td class="text-center">
-                <button class="btn btn-sm btn-warning me-1" onclick="handleEditar(${usu.ndoc})"><i class="bi bi-pencil"></i></button>
+                <button class="btn btn-sm btn-warning me-1" onclick="handleEditar(${usu.ndoc})">
+                    <i class="bi bi-pencil"></i>
+                </button>
             </td>
         `;
         tablaUsuarios.appendChild(fila);
     });
 }
 
-
-
+// ---------- MODAL ----------
 async function abrirmodalUsuario() {
     resetForm();
-    document.getElementById("modalUsuarioLabel").textContent = "Nueva Habitación";
+    esEdicion = false; // 🔹 Creación
+    document.getElementById("modalUsuarioLabel").textContent = "Nuevo Usuario";
     modalUsuario.show();
 }
 
@@ -71,9 +73,10 @@ function cerrarModalUsuario() {
 
 function resetForm() {
     formUsuario.reset();
-    document.getElementById("habitacionId").value = "";
+    document.getElementById("ndoc").value = "";
 }
 
+// ---------- EDITAR ----------
 async function handleEditar(id) {
     const result = await getUsuarioById(id);
     if (!result.success) {
@@ -81,7 +84,9 @@ async function handleEditar(id) {
         return;
     }
     const usuario = result.data;
-    document.getElementById("usuarioId").value = usuario.idUsuario ?? "";
+
+    esEdicion = true; // 🔹 Edición
+
     document.getElementById("ndoc").value = usuario.ndoc ?? "";
     document.getElementById("tipodoc").value = usuario.tipodoc ?? "";
     document.getElementById("nombre").value = usuario.nombre ?? "";
@@ -91,18 +96,19 @@ async function handleEditar(id) {
     document.getElementById("rol").value = usuario.rol ?? "";
     document.getElementById("correo").value = usuario.correo ?? "";
     document.getElementById("usuario").value = usuario.usuario ?? "";
-    document.getElementById("clave").value = ""; // ⚠️ Nunca mostrar la clave real
+    document.getElementById("clave").value = ""; // Nunca mostrar la clave real
     document.getElementById("estado").value = usuario.estado ? "true" : "false";
+
     document.getElementById("modalUsuarioLabel").textContent = "Editar Usuario";
     modalUsuario.show();
 }
 
-
-
+// ---------- SUBMIT ----------
 async function handleSubmit(e) {
     e.preventDefault();
 
-    const id = document.getElementById("habitacionId").value;
+    const id = esEdicion ? document.getElementById("ndoc").value : null;
+
     const data = {
         ndoc: document.getElementById("ndoc").value.trim(),
         tipodoc: document.getElementById("tipodoc").value.trim(),
@@ -113,10 +119,12 @@ async function handleSubmit(e) {
         rol: document.getElementById("rol").value.trim(),
         correo: document.getElementById("correo").value.trim(),
         usuario: document.getElementById("usuario").value.trim(),
-        clave: document.getElementById("clave").value.trim() || null, // si está vacío, no actualizar
+        clave: document.getElementById("clave").value.trim() || null,
         estado: document.getElementById("estado").value === "true"
     };
-    const result = await saveUsuario(data, id || null);
+
+    const result = await saveUsuario(data, id);
+
     if (!result.success) {
         Swal.fire("Error", result.message, "error");
         return;
@@ -125,7 +133,7 @@ async function handleSubmit(e) {
     cerrarModalUsuario();
 
     Swal.fire({
-        title: id ? "Habitación actualizada" : "Habitación creada",
+        title: esEdicion ? "Usuario actualizado" : "Usuario creado",
         text: result.message ?? "Operación exitosa",
         icon: "success",
         timer: 2000,
@@ -135,7 +143,7 @@ async function handleSubmit(e) {
     await listarUsuarios();
 }
 
-// ---------- MAIN ----------
+// ---------- LISTAR ----------
 async function listarUsuarios() {
     const result = await getUsuarios();
     if (result.success) {
@@ -151,6 +159,5 @@ document.addEventListener('DOMContentLoaded', async () => {
     await listarUsuarios();
 
     formUsuario.addEventListener('submit', handleSubmit);
-
     document.querySelector('[data-bs-target="#modalUsuario"]').addEventListener('click', abrirmodalUsuario);
 });

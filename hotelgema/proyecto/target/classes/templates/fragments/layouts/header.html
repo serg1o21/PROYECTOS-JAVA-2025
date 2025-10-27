@@ -1,51 +1,73 @@
 <div th:fragment="header">
-    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
-        <div class="container">
-            <!-- Logo -->
-            <a class="navbar-brand d-flex justify-content-center align-items-center" th:href="@{/}">
-                <img class="logo__image me-1" th:src="@{/images/logo_hotel.png}">
-                <div class="mt-1">GEMA</div>
+  <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+    <div class="container">
+      <!-- Logo -->
+      <a
+        class="navbar-brand d-flex justify-content-center align-items-center"
+        th:href="@{/}"
+      >
+        <img class="logo__image me-1" th:src="@{/images/logo_hotel.png}" />
+        <div class="mt-1">GEMA</div>
+      </a>
+
+      <!-- Botón hamburguesa -->
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarNavAltMarkup"
+        aria-controls="navbarNavAltMarkup"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Contenido del menú -->
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav ms-auto">
+          <a class="nav-link" th:href="@{/}">Inicio</a>
+          <a class="nav-link" th:href="@{/habitaciones}">Habitaciones</a>
+          <a class="nav-link" th:href="@{/comentarios}">Reseñas</a>
+          <a class="nav-link" th:href="@{'/' + '#nosotros'}">Nosotros</a>
+
+          <!-- Usuario no autenticado -->
+          <a
+            class="nav-link"
+            sec:authorize="!isAuthenticated()"
+            th:href="@{/login}"
+          >
+            Iniciar Sesión
+          </a>
+
+          <!-- Usuario autenticado -->
+          <div sec:authorize="isAuthenticated()" class="nav-item dropdown">
+            <a
+              class="nav-link dropdown-toggle"
+              href="#"
+              id="navbarDropdown"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              Hola, <span sec:authentication="name"></span>
             </a>
-
-            <!-- Botón hamburguesa -->
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup"
-                aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <!-- Contenido del menú -->
-            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                <div class="navbar-nav ms-auto">
-                    <a class="nav-link" th:href="@{/}">Inicio</a>
-                    <a class="nav-link" th:href="@{/habitaciones}">Habitaciones</a>
-                    <a class="nav-link" th:href="@{'/' + '#nosotros'}">Nosotros</a>
-
-                    <!-- Usuario no autenticado -->
-                    <a class="nav-link" sec:authorize="!isAuthenticated()" th:href="@{/login}">
-                        Iniciar Sesión
-                    </a>
-
-                    <!-- Usuario autenticado -->
-                    <div sec:authorize="isAuthenticated()" class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            Hola, <span sec:authentication="name"></span>
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li>
-                                <a class="dropdown-item"
-                                    th:href="${#lists.contains(#authentication.principal.authorities.![authority], 'ROLE_ADMIN')} ? @{/admin/dashboard} : @{/cliente/dashboard}">
-                                    Dashboard
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" id="logoutBtn">Cerrar Sesión</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li>
+                <a
+                  class="dropdown-item"
+                  th:href="${#lists.contains(#authentication.principal.authorities.![authority], 'ROLE_ADMIN')} ? @{/admin/dashboard} : @{/cliente/dashboard}"
+                >
+                  Dashboard
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" id="logoutBtn">Cerrar Sesión</a>
+              </li>
+            </ul>
+          </div>
         </div>
-    </nav>
+      </div>
+    </div>
+  </nav>
 </div>
